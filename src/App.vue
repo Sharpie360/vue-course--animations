@@ -5,7 +5,7 @@
                 <h1>Animations</h1>
                 <hr>
                 <button class="btn btn-primary mb-3" @click="show = !show">Show Alert</button>
-                <transition>
+                <transition name="fade">
                     <div class="alert alert-info" v-if="show">This is an alert box!</div> 
                 </transition>
             </div>
@@ -24,5 +24,22 @@
 </script>
 
 <style>
+
+.fade-enter {
+    opacity: 0;
+    transform: translateY(-1rem);
+}
+
+.fade-enter-active {
+    transform: translateY(0);
+    transition: all .3s ease-in-out;
+}
+.fade-leave-active {
+
+}
+
+.fade-leave-to {
+
+}
 
 </style>
