@@ -8,6 +8,9 @@
                 <transition name="fade">
                     <div class="alert alert-info" v-if="show">This is an alert box!</div> 
                 </transition>
+                <transition name="slide">
+                    <div class="alert alert-info" v-if="show">This is an alert box!</div> 
+                </transition>
             </div>
         </div>
     </div>
@@ -29,17 +32,56 @@
     opacity: 0;
     transform: translateY(-1rem);
 }
-
 .fade-enter-active {
-    transform: translateY(0);
     transition: all .3s ease-in-out;
 }
-.fade-leave-active {
 
+.fade-leave-active {
+    transition: all .3s ease-in-out;
+}
+.fade-leave-to {
+    opacity: 0;
+    transform: translateY(1rem)
 }
 
-.fade-leave-to {
+.slide-enter {
+    opacity: 0;
+}
+.slide-enter-active {
+    animation: slide-in .5s ease-in-out forwards;
+    transition: opacity .3s;
+}
 
+.slide-leave-active {
+    animation: slide-out .3s ease-in-out forwards;
+    transition: opacity .5s;
+}
+.slide-leave-to {
+    opacity: 0;
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateX(-2rem)
+    }
+    50% {
+        transform: translateX(.5rem)
+    }
+    to {
+        transform: translateX(0)
+    }
+}
+
+@keyframes slide-out {
+    from {
+        transform: translateX(0rem)
+    }
+    50% {
+        transform: translateX(.5rem)
+    }
+    to {
+        transform: translateX(-2rem)
+    }
 }
 
 </style>
