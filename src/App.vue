@@ -2,17 +2,31 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 mt-5">
-                <h1>Animations</h1>
+                <h1>Vue.js Animations</h1>
+                <hr>
+                <select class="form-control" v-model="selectedAnimation">
+                    <option value="fade">Downwards Fade</option>
+                    <option value="slide-left">Slide Left</option>
+                    <option value="slide-right">Slide Right</option>
+                </select>
                 <hr>
                 <button class="btn btn-primary mb-3" @click="show = !show">Show Alert Animations</button>
-                <transition name="fade">
+                <transition name="fade" type="transition">
                     <div class="alert alert-primary" v-if="show">This is an alert box!</div> 
                 </transition>
                 <transition name="slide-left" type="animation">
-                    <div class="alert alert-info" v-if="show"><h2>This is an alert box!</h2></div> 
+                    <div class="alert alert-info" v-if="show">
+                        <h2 class="mb-1">This is an alert box!</h2>
+                    </div> 
                 </transition>
                 <transition name="slide-right" type="animation" appear>
-                    <div class="alert alert-danger" v-if="show">This is an alert box DANGER op.</div> 
+                    <div class="alert alert-info" v-if="show">OFF</div> 
+                    <div class="alert alert-primary" v-else>This is an alert box DANGER op.</div> 
+                </transition>
+                <transition
+                    enter-active-class="animated pulse"
+                    leave-active-class="animated pulse">
+                    <div class="alert alert-warning" v-if="show">Some Cool Animations</div>
                 </transition>
                 
             </div>
@@ -38,7 +52,9 @@
     export default {
         data() {
             return {
-                show: false
+                show: false,
+                showSecond: false,
+                selectedAnimation: 'fade'
             }
         }
     }
@@ -49,10 +65,20 @@ body {
     background-color: #212121;
     color: #f7f7f7
 }
-.alert-primary {
-    background-color: rgb(41, 179, 160);
+
+.alert {
     color: #f7f7f7;
 }
+.alert-primary {
+    background-color: #03A9AC;
+}
+.alert-success {
+    background-color: #00d6a4;
+}
+.alert-info {
+    background-color: rgba(3, 216, 203, .2);
+}
+
 .card-header {
     color: #03A9AC
 }
