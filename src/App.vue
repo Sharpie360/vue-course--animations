@@ -3,27 +3,46 @@
         <div class="row">
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 mt-5">
                 <h1>Vue.js Animations</h1>
+                <h3>
+                    <span 
+                        @click="cssAnimations = true"
+                        class="pointer"
+                        >CSS
+                    </span> 
+                    or 
+                    <span 
+                        @click="cssAnimations = false"
+                        class="pointer"
+                        >JS
+                    </span>?
+                </h3>
                 <hr>
-                <select class="form-control" v-model="selectedAnimation">
-                    <option value="slide-left">Slide Left</option>
-                    <option value="slide-right">Slide Right</option>
-                </select>
-                <hr>
-                <button class="btn btn-primary mb-3" @click="show = !show">Show Alert Animations</button>
-                <transition
-                    enter-active-class="animated pulse"
-                    leave-active-class="animated pulse">
-                    <div class="alert alert-warning" v-if="show">AnimateCSS Animations</div>
-                </transition>
-                <transition name="fade" type="transition">
-                    <div class="alert alert-primary" v-if="show"> an alert box using the transition class anim hooks</div> 
-                </transition>
-                <transition name="slide-left" type="animation">
-                    <div class="alert alert-info" v-if="show">
-                        <h2 class="mb-1">This is an alert box!</h2>
-                    </div> 
-                </transition>
-                
+                <div v-if="cssAnimations">
+
+                    <select class="form-control" v-model="selectedAnimation">
+                        <option value="slide-left" selected>Slide Left</option>
+                        <option value="slide-right">Slide Right</option>
+                    </select>
+                    <hr>
+                    <button class="btn btn-primary mb-3" @click="show = !show">Show Alert Animations</button>
+                    <transition
+                        enter-active-class="animated pulse"
+                        leave-active-class="animated pulse">
+                        <div class="alert alert-warning" v-if="show">AnimateCSS Animations</div>
+                    </transition>
+                    <transition name="fade" type="transition">
+                        <div class="alert alert-primary" v-if="show"> an alert box using the transition class anim hooks</div> 
+                    </transition>
+                    <transition name="slide-left" type="animation">
+                        <div class="alert alert-info" v-if="show">
+                            <h2 class="mb-1">This is an alert box!</h2>
+                        </div> 
+                    </transition>
+                    
+                </div>
+                <div v-else>
+                    Javascript Animations
+                </div>
                 
             </div>
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 mt-5 pt-4">
@@ -63,7 +82,7 @@
         data() {
             return {
                 show: false,
-                showSecond: false,
+                cssAnimations: true,
                 selectedAnimation: 'fade'
             }
         }
@@ -74,6 +93,10 @@
 body {
     background-color: #212121;
     color: #f7f7f7
+}
+
+.pointer {
+    cursor: pointer;
 }
 
 .alert {
