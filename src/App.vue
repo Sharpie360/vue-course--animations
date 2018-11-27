@@ -41,7 +41,26 @@
                     
                 </div>
                 <div v-else>
-                    Javascript Animations
+                    <h4 class="mb-3">Javascript Animations</h4>
+
+                    <button 
+                        class="btn btn-success"
+                        @click="loaded = !loaded"
+                        >Load / Remove Element
+                    </button>
+                    <hr>
+
+                    <transition
+                        @before-enter="beforeEnter"
+                        @enter="enter"
+                        @after-enter="afterEnter"
+                        @enter-cancelled="eventCancelled"
+                        @before-leave="beforeLeave"
+                        @leave="leave"
+                        @after-leave="afterLeave"
+                        @leave-cancelled="leaveCancelled">
+                        <div class="box"></div>
+                    </transition>
                 </div>
                 
             </div>
@@ -81,10 +100,14 @@
     export default {
         data() {
             return {
-                show: false,
                 cssAnimations: true,
-                selectedAnimation: 'fade'
+                show: false,
+                load: true,
+                selectedAnimation: ''
             }
+        },
+        methods: {
+            
         }
     }
 </script>
@@ -122,6 +145,14 @@ body {
     color: #4b4b4b
 }
 
+/* custom box div */
+.box {
+    width: 8rem; 
+    height: 8rem; 
+    background-color: #00d6a4; 
+    border: 3px solid #f7f7f7; 
+    border-radius: 7px;
+}
 
 .fade-enter {
     opacity: 0;
