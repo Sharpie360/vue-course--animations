@@ -54,12 +54,13 @@
                         @before-enter="beforeEnter"
                         @enter="enter"
                         @after-enter="afterEnter"
-                        @enter-cancelled="eventCancelled"
+                        @enter-cancelled="enterCancelled"
                         @before-leave="beforeLeave"
                         @leave="leave"
                         @after-leave="afterLeave"
-                        @leave-cancelled="leaveCancelled">
-                        <div class="box"></div>
+                        @leave-cancelled="leaveCancelled"
+                        :css="false">
+                        <div class="box" v-if="loaded"></div>
                     </transition>
                 </div>
                 
@@ -102,12 +103,52 @@
             return {
                 cssAnimations: true,
                 show: false,
-                load: true,
-                selectedAnimation: ''
+                loaded: true,
+                selectedAnimation: '',
+                boxSize: 100,
             }
         },
         methods: {
-            
+            beforeEnter: (el) => {
+                console.log('beforeEnter', el)
+                el.style.opacity = 0;
+                el.style.width = this.boxSize + 'px'
+                el.style.height = this.boxSize + 'px'
+            },
+            enter: (el, done) => {
+                console.log('enter', el, done)
+                let round = 1;
+                const interval = setInterval(() => {
+                    el.style.opacity = (round / 20)
+                    el.style.width += (this.boxSize + (round * 10)) + 'px'
+                    round++
+                    if (round > 20) {
+                        clearInterval(interval)
+                        done()
+                    }
+                }, 20);
+                
+                done()
+            },
+            afterEnter: (el) => {
+                console.log('afterEnter')
+            },
+            enterCancelled: (el) => {
+                console.log('enterCancelled')
+            },
+            beforeLeave: (el) => {
+                console.log('beforeLeave')
+            },
+            leave: (el, done) => {
+                console.log('leave', el, done)
+                done()
+            },
+            afterLeave: (el) => {
+                console.log('afterLeave')
+            },
+            leaveCancelled: (el) => {
+                console.log('leaveCancelled')
+            }
         }
     }
 </script>
