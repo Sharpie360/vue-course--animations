@@ -11,7 +11,7 @@
         <hr>
         <div v-if="cssAnimations">
           <select class="form-control" v-model="selectedAnimation">
-            <option value="slide-left">Slide Left</option>
+            <option selected value="slide-left">Slide Left</option>
             <option value="slide-right">Slide Right</option>
           </select>
           <hr>
@@ -31,32 +31,12 @@
             </div>
           </transition>
         </div>
-        <div v-else>
-          <h4 class="mb-3">Javascript Animations</h4>
 
-          <button class="btn btn-success" @click="loaded = !loaded">Load / Remove Element</button>
-          <hr>
+				
 
-          <transition-group
-            @before-enter="beforeEnter"
-            @enter="enter"
-            @after-enter="afterEnter"
-            @enter-cancelled="enterCancelled"
-            @before-leave="beforeLeave"
-            @leave="leave"
-            @after-leave="afterLeave"
-            @leave-cancelled="leaveCancelled"
-            :css="false"
-          >
-            <div class="box" v-if="loaded" key="box">
-							<h3 class="box--text text-center" v-show="loaded" key="text">
-								Hello from inside the box! 
-							</h3>
-						</div>
-          </transition-group>
-        </div>
       </div>
 
+			<!-- click toggle alerts -->
       <div 
 				class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 mt-5 pt-4" 
 				v-if="cssAnimations">
@@ -65,59 +45,69 @@
                     always check the type against the action
                     set the mode for when to trigger next element animation
         -->
+				<div @click="clickAlert_1 = !clickAlert_1">
 					<transition :name="selectedAnimation" type="animation" mode="out-in">
-						<div class="alert alert-info" v-if="show" key="off">OFF</div>
+						<div class="alert alert-info" v-if="clickAlert_1" key="off">OFF</div>
 						<div class="alert alert-primary" v-else key="on">ON</div>
 					</transition>
+				</div>
+				<div @click="clickAlert_2 = !clickAlert_2">
 					<transition name="fade" type="transition" mode="out-in">
-						<div class="alert alert-info" v-if="show" key="off2">OFF</div>
-						<div class="alert alert-primary" v-else key="on2">ON</div>
+						<div class="alert alert-info" v-if="clickAlert_2" key="off2">Click to turn me OFF!</div>
+						<div class="alert alert-primary" v-else key="on2">Click to turn me ON!</div>
 					</transition>
+				</div>
 
-					<div class="card">
-						<h5 class="card-header">Animation with Vue</h5>
-						<div class="card-body expand-body" v-if="show">
-							<ul class="list-group list-group-flush">
-								<transition-group name="slide-right">
-									<li
-										class="list-group-item"
-										v-for="(item, i) in 5"
-										:key="i"
-									>Some fancy list items here</li>
-								</transition-group>
-							</ul>
-						</div>
-					</div>
+					<list></list>
+
       </div>
 
+			<!-- dynamic component transitions -->
 			<div 
 				class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 mt-5 pt-4"
 				v-else>
-
+				<button 
+					@click="selectedCmp === 'success-alert' ? selectedCmp = 'danger-alert' : selectedCmp = 'success-alert'"
+					class="btn btn-danger mb-3"
+					>Toggle Alerts
+				</button>
+				<transition name="fade" mode="out-in">
+					<component :is="selectedCmp"></component>				
+				</transition>
 			</div>
+
+			<!-- javascript hook animations/transitions -->
+			<boxes></boxes>
+
     </div>
   </div>
 </template>
 
 <script>
-import Navbar from './components/Navbar'
-import SuccessAlert from './components/SuccessAlert'
-import DangerAlert from './components/DangerAlert'
+import Navbar from './components/Navbar.vue'
+import SuccessAlert from './components/SuccessAlert.vue'
+import DangerAlert from './components/DangerAlert.vue'
+import Boxes from './components/Boxes.vue'
+import List from './components/List.vue'
 
 export default {
   data() {
     return {
       cssAnimations: true,
-      show: false,
-      loaded: false,
+			show: false,
+			clickAlert_1: true,
+			clickAlert_2: true,
       selectedAnimation: "",
 			boxSize: 100,
-			showBoxMessage: false
+			showBoxMessage: false,
+			selectedCmp: 'success-alert'
     };
 	},
 	components: {
 		'success-alert': SuccessAlert,
-		'danger-alert': DangerAlert
+		'danger-alert': DangerAlert,
+		'boxes': Boxes,
+		'list': List
 	},
   methods: {
 
@@ -125,63 +115,7 @@ export default {
 			this.showBoxMessage = !this.showBoxMessage
 			console.log('test')
 		},
-    beforeEnter: el => {
-      console.log("beforeEnter", el);
-			this.boxSize = 100
-			el.style.opacity = 0
-			// el.style.width = this.boxSize + 'px'
-		},
-    enter: (el, done) => {
-      console.log("enter", el, done);
-      let round = 1;
-      const interval = setInterval(() => {
-        el.style.opacity = round / 20;
-        el.style.width = (this.boxSize + round * 10) + "px";
-        el.style.height = (this.boxSize + round * 10) + "px";
-        round++;
-        if (round > 20) {
-					clearInterval(interval);
-          done();
-        }
-      }, 20);
-    },
-    afterEnter: el => {
-			const text = el.children[0]
-			console.log(text)
-			text.style.opacity = 1;
-    },
-    enterCancelled: el => {
-      // console.log("enterCancelled");
-    },
-    beforeLeave: el => {
-			console.log("beforeLeave");
-			this.boxSize = 300
-			el.style.width = this.boxSize + 'px'
-    },
-    leave: (el, done) => {
-			const text = el.children[0]
-			console.log('leave', text)
-			text.style.opacity = 0
-			// console.log("leave", el, done);
-			const roundMax = 20;
-      let round = 1;
-      const interval = setInterval(() => {
-				el.style.opacity = 1 / 20 * (roundMax - round);
-				el.style.width = (this.boxSize - round * 10) + 'px'
-				el.style.height = (this.boxSize - round * 10) + 'px'
-        round++;
-        if ((round > roundMax)) {
-          clearInterval(interval);
-          done();
-        }
-      }, 20);
-    },
-    afterLeave: el => {
-      console.log('afterleave:', el);
-    },
-    leaveCancelled: el => {
-      // console.log("leaveCancelled");
-    }
+  
   }
 };
 </script>
@@ -195,12 +129,21 @@ body {
 .pointer {
   cursor: pointer;
 }
+.flexbox-space-evenly {
+	display: flex;
+	flex: 1;
+	justify-content: space-evenly;
+}
+.flex-vert {
+	align-items: center;
+}
+
 
 .alert {
   color: #f7f7f7;
 }
 .alert-primary {
-  background-color: #03a9ac;
+  background-color: rgb(3, 169, 172);
 }
 .alert-success {
   background-color: #00d6a4;
@@ -211,6 +154,9 @@ body {
 .alert-warning {
   background-color: rgb(245, 125, 125);
 }
+.alert-danger {
+	background-color: #fa423e;
+}
 
 .card-header {
   color: #03a9ac;
@@ -219,24 +165,6 @@ body {
   color: #4b4b4b;
 }
 
-/* custom box div */
-.box {
-  width: 8rem; 
-  height: 8rem; 
-  background-color: #00d6a4;
-  border: 3px solid #f7f7f7;
-  border-radius: 7px;
-	padding: 1rem;
-	box-shadow: 2px 2px 10px rgba(127, 127, 127, 0.3);
-	display: flex;
-	flex: 1;
-	justify-content: center;
-	align-items: center;
-}
-
-.box--text {
-	opacity: 0;
-}
 
 
 /*
