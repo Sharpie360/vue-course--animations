@@ -38,7 +38,7 @@
 
 			<!-- click toggle alerts -->
       <div 
-				class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 mt-5 pt-4" 
+				class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 mt-5 pt-0" 
 				v-if="cssAnimations">
         <!-- 
                     transition between different elements 
@@ -58,26 +58,28 @@
 					</transition>
 				</div>
 
-					<list></list>
+					<!-- dynamic component transitions -->
+					<div v-if="cssAnimations">
+						<button 
+							@click="selectedCmp === 'success-alert' ? selectedCmp = 'danger-alert' : selectedCmp = 'success-alert'"
+							class="btn btn-danger my-3"
+							>Toggle Alerts
+						</button>
+						<transition name="fade" mode="out-in">
+							<component :is="selectedCmp"></component>				
+						</transition>
+					</div>
+
 
       </div>
+				<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 mt-5 pt-0" v-else>
 
-			<!-- dynamic component transitions -->
-			<div 
-				class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 mt-5 pt-4"
-				v-else>
-				<button 
-					@click="selectedCmp === 'success-alert' ? selectedCmp = 'danger-alert' : selectedCmp = 'success-alert'"
-					class="btn btn-danger mb-3"
-					>Toggle Alerts
-				</button>
-				<transition name="fade" mode="out-in">
-					<component :is="selectedCmp"></component>				
-				</transition>
-			</div>
-
+					<list></list>
+					<button class="btn btn-primary mt-3">Add</button>
+					<button class="btn btn-danger mt-3">Remove</button>
+				</div>
 			<!-- javascript hook animations/transitions -->
-			<boxes></boxes>
+			<boxes v-if="!cssAnimations"></boxes>
 
     </div>
   </div>
