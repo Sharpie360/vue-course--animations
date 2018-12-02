@@ -6,7 +6,7 @@
         <transition-group>
           <li
             class="list-group-item"
-            v-for="(item, i) in 5"
+            v-for="(item, i) in 2"
             :key="i"
           >{{ i }}. Some fancy list items here</li>
         </transition-group>
