@@ -3,3 +3,9 @@
     This is a dynamic Success alert!
   </div>
 </template>
+
+<script>
+  export default {
+    
+  }
+</script>
