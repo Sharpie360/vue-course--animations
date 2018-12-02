@@ -11,7 +11,7 @@
         <hr>
         <div v-if="cssAnimations">
           <select class="form-control" v-model="selectedAnimation">
-            <option value="slide-left" selected>Slide Left</option>
+            <option value="slide-left">Slide Left</option>
             <option value="slide-right">Slide Right</option>
           </select>
           <hr>
@@ -37,10 +37,10 @@
           <button class="btn btn-success" @click="loaded = !loaded">Load / Remove Element</button>
           <hr>
 
-          <transition
+          <transition-group
             @before-enter="beforeEnter"
             @enter="enter"
-            @after-enter="showBoxMessage = true"
+            @after-enter="afterEnter"
             @enter-cancelled="enterCancelled"
             @before-leave="beforeLeave"
             @leave="leave"
@@ -48,63 +48,79 @@
             @leave-cancelled="leaveCancelled"
             :css="false"
           >
-            <div class="box" v-if="loaded">
-							<h3 class="text-center" v-if="showBoxMessage">
+            <div class="box" v-if="loaded" key="box">
+							<h3 class="box--text text-center" v-show="loaded" key="text">
 								Hello from inside the box! 
 							</h3>
 						</div>
-          </transition>
+          </transition-group>
         </div>
       </div>
-      <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 mt-5 pt-4">
+
+      <div 
+				class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 mt-5 pt-4" 
+				v-if="cssAnimations">
         <!-- 
                     transition between different elements 
                     always check the type against the action
                     set the mode for when to trigger next element animation
         -->
-        <transition :name="selectedAnimation" type="animation" mode="out-in">
-          <div class="alert alert-info" v-if="show" key="off">OFF</div>
-          <div class="alert alert-primary" v-else key="on">ON</div>
-        </transition>
-        <transition name="fade" type="transition" mode="out-in">
-          <div class="alert alert-info" v-if="show" key="off2">OFF</div>
-          <div class="alert alert-primary" v-else key="on2">ON</div>
-        </transition>
+					<transition :name="selectedAnimation" type="animation" mode="out-in">
+						<div class="alert alert-info" v-if="show" key="off">OFF</div>
+						<div class="alert alert-primary" v-else key="on">ON</div>
+					</transition>
+					<transition name="fade" type="transition" mode="out-in">
+						<div class="alert alert-info" v-if="show" key="off2">OFF</div>
+						<div class="alert alert-primary" v-else key="on2">ON</div>
+					</transition>
 
-        <div class="card">
-          <h5 class="card-header">Animation with Vue</h5>
-          <div class="card-body expand-body" v-if="show">
-            <ul class="list-group list-group-flush">
-              <transition-group name="slide-right">
-                <li
-                  class="list-group-item"
-                  v-for="(item, i) in 5"
-                  :key="i"
-                >Some fancy list items here</li>
-              </transition-group>
-            </ul>
-          </div>
-        </div>
+					<div class="card">
+						<h5 class="card-header">Animation with Vue</h5>
+						<div class="card-body expand-body" v-if="show">
+							<ul class="list-group list-group-flush">
+								<transition-group name="slide-right">
+									<li
+										class="list-group-item"
+										v-for="(item, i) in 5"
+										:key="i"
+									>Some fancy list items here</li>
+								</transition-group>
+							</ul>
+						</div>
+					</div>
       </div>
+
+			<div 
+				class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 mt-5 pt-4"
+				v-else>
+
+			</div>
     </div>
   </div>
 </template>
 
 <script>
-const vm = this;
+import Navbar from './components/Navbar'
+import SuccessAlert from './components/SuccessAlert'
+import DangerAlert from './components/DangerAlert'
+
 export default {
   data() {
     return {
       cssAnimations: true,
       show: false,
-      loaded: true,
+      loaded: false,
       selectedAnimation: "",
 			boxSize: 100,
 			showBoxMessage: false
     };
-  },
+	},
+	components: {
+		'success-alert': SuccessAlert,
+		'danger-alert': DangerAlert
+	},
   methods: {
-		
+
 		toggleMsg() {
 			this.showBoxMessage = !this.showBoxMessage
 			console.log('test')
@@ -130,35 +146,41 @@ export default {
       }, 20);
     },
     afterEnter: el => {
-			console.log("afterEnter");
+			const text = el.children[0]
+			console.log(text)
+			text.style.opacity = 1;
     },
     enterCancelled: el => {
-      console.log("enterCancelled");
+      // console.log("enterCancelled");
     },
     beforeLeave: el => {
 			console.log("beforeLeave");
-			vm.showBoxMessage = false
 			this.boxSize = 300
 			el.style.width = this.boxSize + 'px'
     },
     leave: (el, done) => {
-      console.log("leave", el, done);
+			const text = el.children[0]
+			console.log('leave', text)
+			text.style.opacity = 0
+			// console.log("leave", el, done);
+			const roundMax = 20;
       let round = 1;
       const interval = setInterval(() => {
+				el.style.opacity = 1 / 20 * (roundMax - round);
 				el.style.width = (this.boxSize - round * 10) + 'px'
 				el.style.height = (this.boxSize - round * 10) + 'px'
         round++;
-        if ((round > 20)) {
+        if ((round > roundMax)) {
           clearInterval(interval);
           done();
         }
       }, 20);
     },
     afterLeave: el => {
-      console.log("afterLeave");
+      console.log('afterleave:', el);
     },
     leaveCancelled: el => {
-      console.log("leaveCancelled");
+      // console.log("leaveCancelled");
     }
   }
 };
@@ -205,13 +227,16 @@ body {
   border: 3px solid #f7f7f7;
   border-radius: 7px;
 	padding: 1rem;
+	box-shadow: 2px 2px 10px rgba(127, 127, 127, 0.3);
 	display: flex;
 	flex: 1;
 	justify-content: center;
 	align-items: center;
 }
 
-
+.box--text {
+	opacity: 0;
+}
 
 
 /*
