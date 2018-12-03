@@ -75,8 +75,7 @@
 				<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 mt-5 pt-0" v-else>
 
 					<list></list>
-					<button class="btn btn-primary mt-3">Add</button>
-					<button class="btn btn-danger mt-3">Remove</button>
+					
 				</div>
 			<!-- javascript hook animations/transitions -->
 			<boxes v-if="!cssAnimations"></boxes>
@@ -160,14 +159,6 @@ body {
 	background-color: #fa423e;
 }
 
-.card-header {
-  color: #03a9ac;
-}
-.card-body {
-  color: #4b4b4b;
-}
-
-
 
 /*
 ==============================================
@@ -205,6 +196,9 @@ body {
 }
 .slide-left-leave-to {
   opacity: 0;
+}
+.slide-left-move {
+	transition: transform .5s;
 }
 
 .slide-right-enter {
