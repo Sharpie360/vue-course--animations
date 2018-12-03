@@ -9,6 +9,7 @@
               class="list-group-item"
               v-for="(item, i) in list"
               :key="i"
+              @click="removeItem(i)"
               >{{ i + 1 }}. {{ item }}
             </li>
           </transition-group>
@@ -42,16 +43,14 @@ export default {
     }
   },
   methods: {
-    addItem(i) {
+    addItem() {
       const newItem = Math.floor(Math.random() * this.list.length)
       console.log(newItem)
       this.list.splice(newItem, 0, `Some fancy list items here. Number ${this.list.length}`)
     },
-    removeItem() {
-      const chosenItem = Math.floor(Math.random() * this.list.length)
-      console.log(chosenItem);
-      
-      this.list.splice(chosenItem, 1)
+    removeItem(i) {
+      this.list.splice(i, 1)
+    
     }
   }
 }
