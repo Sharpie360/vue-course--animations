@@ -2,7 +2,11 @@
   <div class="boxes">
     <h4 class="mb-3">Javascript Animations</h4>
 
-    <button class="btn btn-success" @click="loaded = !loaded">Load / Remove Element</button>
+    <button 
+      class="btn btn-success" 
+      @click="loaded = !loaded"
+      >Load / Remove Element
+    </button>
     <hr>
     <div class="flexbox-space-evenly flex-vert">
       <box 
