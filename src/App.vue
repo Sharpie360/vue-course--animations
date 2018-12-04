@@ -19,7 +19,7 @@
           <transition enter-active-class="animated pulse" leave-active-class="animated pulse">
             <div class="alert alert-warning" v-if="show">AnimateCSS Animations</div>
           </transition>
-          <transition name="fade" type="transition">
+          <transition name="fade-down" type="transition">
             <div
               class="alert alert-primary"
               v-if="show"
@@ -65,7 +65,7 @@
 							class="btn btn-danger my-3"
 							>Toggle Alerts
 						</button>
-						<transition name="fade" mode="out-in">
+						<transition name="fade-up" mode="out-in">
 							<component :is="selectedCmp"></component>				
 						</transition>
 					</div>
@@ -166,20 +166,35 @@ body {
 ==============================================
 */
 
-.fade-enter {
+.fade-down-enter {
   opacity: 0;
   transform: translateY(-1rem);
 }
-.fade-enter-active {
+.fade-down-enter-active {
   transition: all 0.3s ease-in-out;
 }
 
-.fade-leave-active {
+.fade-down-leave-active {
   transition: all 0.3s ease-in-out;
 }
-.fade-leave-to {
+.fade-down-leave-to {
   opacity: 0;
   transform: translateY(1rem);
+}
+.fade-up-enter {
+  opacity: 0;
+  transform: translateY(1rem);
+}
+.fade-up-enter-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.fade-up-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+.fade-up-leave-to {
+  opacity: 0;
+  transform: translateY(-1rem);
 }
 
 .slide-left-enter {
@@ -198,7 +213,7 @@ body {
   opacity: 0;
 }
 .slide-left-move {
-	transition: transform .5s;
+	transition: transform 1s;
 }
 
 .slide-right-enter {
