@@ -4,7 +4,7 @@
       <h5 class="card-header">Animation with Vue</h5>
       <div class="card-body expand-body p-0">
         <ul class="list-group list-group-flush">
-          <transition-group name="slide-left">
+          <transition-group name="fade-up">
             <li
               class="list-group-item"
               v-for="(item, i) in list"
@@ -36,9 +36,7 @@ export default {
   data () {
     return {
       list: [
-        'Some fancy list items here. Number 0',
-        'Some fancy list items here. Number 1',
-        'Some fancy list items here. Number 2',
+        1,2,3,4,5
       ]
     }
   },
@@ -46,7 +44,7 @@ export default {
     addItem() {
       const newItem = Math.floor(Math.random() * this.list.length)
       console.log(newItem)
-      this.list.splice(newItem, 0, `Some fancy list items here. Number ${this.list.length}`)
+      this.list.splice(newItem, 0, this.list.length + 1)
     },
     removeItem(i) {
       this.list.splice(i, 1)
