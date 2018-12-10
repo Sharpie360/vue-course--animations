@@ -213,8 +213,9 @@ body {
   opacity: 0;
 }
 .slide-left-move {
-	transition: transform 1s;
+	transition: transform .3s;
 }
+
 
 .slide-right-enter {
   opacity: 0;
