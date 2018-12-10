@@ -4,11 +4,11 @@
       <h5 class="card-header">Animation with Vue</h5>
       <div class="card-body expand-body p-0">
         <ul class="list-group list-group-flush">
-          <transition-group name="fade-up">
+          <transition-group name="slide-left">
             <li
               class="list-group-item"
               v-for="(item, i) in list"
-              :key="i"
+              :key="item"
               @click="removeItem(i)"
               >{{ i + 1 }}. {{ item }}
             </li>
@@ -22,7 +22,7 @@
           >Add
         </button>
         <button 
-          @click="removeItem"
+          @click="removeItem(i)"
           class="btn btn-danger mt-3"
           >Remove
         </button>
